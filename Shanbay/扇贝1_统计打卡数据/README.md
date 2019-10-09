@@ -4,29 +4,18 @@
 
 所以，这是一个特别啰嗦的教程
 
-------------
-
-
 ### 完整代码
 
-------------
 
+Python爬虫：获取扇贝打卡信息
 
-Python爬虫：[获取扇贝打卡信息](http://www.zhaojingyi0126.com/post/7/)
+Python爬虫：将爬虫结果保存到Excel
 
-Python爬虫：[将爬虫结果保存到Excel](http://www.zhaojingyi0126.com/post/16/)
-
-Python爬虫：[从TXT导入数据](http://www.zhaojingyi0126.com/post/17/)
+Python爬虫：从TXT导入数据
 
 （如果你懒得看教程，可以直接看代码）
 
-------------
-
 ### 什么是爬虫？
-
-------------
-
-
 
 爬虫是自动化帮我们获取网页数据的程序
 
@@ -44,14 +33,7 @@ Python爬虫：[从TXT导入数据](http://www.zhaojingyi0126.com/post/17/)
 
 *   保存数据：把数据保存到EXCEL或者txt
 
-------------
-
-
 ### 明确目标
-
-------------
-
-
 
 我们以扇贝网为例，讲解爬虫
 
@@ -59,18 +41,11 @@ Python爬虫：[从TXT导入数据](http://www.zhaojingyi0126.com/post/17/)
 
 我爬虫的目标是：得到小组成员一周的打卡时间汇总，以及对应的学习内容
 
-![markdown17569167-84e9b840e28e1d8b.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-84e9b840e28e1d8b.jpg){:width="100%" align=center}
+![markdown17569167-84e9b840e28e1d8b.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-84e9b840e28e1d8b.jpg)
 
 下面开始爬虫，出发！
 
-------------
-
-
 ### 打开网页
-
-------------
-
-
 
 
 首先打卡网页，各个网页的网址不一样，大家要尝试去发现规律
@@ -90,7 +65,7 @@ web = "https://www.shanbay.com/api/v1/checkin/user/"+str(ID)+"/"
 web = "https://www.shanbay.com/api/v1/checkin/user/16888030/"
 ```
 
-![markdownpachong1.png](http://pxpfco2u1.bkt.clouddn.com/markdownpachong1.png){:width="100%" align=center}
+![markdownpachong1.png](http://pxpfco2u1.bkt.clouddn.com/markdownpachong1.png)
 
 存在web中的网址
 
@@ -104,7 +79,7 @@ shanbay = urlopen(web) # 打开网址
 
 `urllib` 是Python 中用于获取网页数据的模块，通过` import `调用它。我们用`urlopen`打开网址，这时候`print(shanbay)`，输出`shanbay`的内容
 
-![markdown17569167-f7d20c207482a6ac.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-f7d20c207482a6ac.webp.jpg){:width="100%" align=center}
+![markdown17569167-f7d20c207482a6ac.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-f7d20c207482a6ac.webp.jpg)
 
 我们可以看到“Response”，代表我们成功获得了对方网址给我们的回答
 
@@ -116,18 +91,13 @@ shanbay_data = shanbay.read().decode()
 
 这时候输出```shanbay_data```，可以看到网页内容已经被读取
 
-![markdown17569167-11251cff7731d443.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-11251cff7731d443.webp.jpg){:width="100%" align=center}
-
-------------
-
+![markdown17569167-11251cff7731d443.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-11251cff7731d443.webp.jpg)
 
 ### 定位数据
 
-------------
-
 网页已经读取成功，接下来我们就需要定位我们需要的数据
 
-![markdown17569167-2cae166851f17174.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-2cae166851f17174.webp.jpg){:width="100%" align=center}
+![markdown17569167-2cae166851f17174.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-2cae166851f17174.webp.jpg)
 
 
 
@@ -218,21 +188,11 @@ re.findall("\"stats\".*?track_object_img" ,shanbay_data)
 
 到这一步，我们就把所有我们需要的内容提取出来了，下面开始具体清洗提取我们要的数据。
 
-------------
-
-
 ### 清洗数据
 
-------------
-
-
-```Python
-find_data = re.findall("\"stats\".*?track_object_img" ,shanbay_data)
-```
- 
 经过上一步，我们把所有需要的内容都保存在```find_data```中，```find_data```里面此时有20条数据，是我最近20天的打卡情况
 
-![markdown17569167-dd44b6423ecddf74.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-dd44b6423ecddf74.webp.jpg){:width="100%" align=center}
+![markdown17569167-dd44b6423ecddf74.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-dd44b6423ecddf74.webp.jpg)
 
 我们仔细观察```find_data```数据，可以看到，打卡的内容是有规律的。
 
@@ -268,7 +228,7 @@ for data in find_data:
 大家可以看到，我用了4个```re.findall```，把阅读```read```、听力```listen```、句子```sentence```、单词```bdc```数据取出来
 以单词```bdc```为例，这时候提取的数据如下
 
-![markdown17569167-e0d46d0a5933a3f0.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-e0d46d0a5933a3f0.webp.jpg){:width="100%" align=center}
+![markdown17569167-e0d46d0a5933a3f0.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-e0d46d0a5933a3f0.webp.jpg)
 
 怎么具体提取出```60```和```11.0 ```这两个数字呢？
 
@@ -279,7 +239,7 @@ bdc_time = re.findall(r"\d+\.?\d*",str(bdc))[1]
 
 还是用re正则化表达，用```\d```把所有数字提取出来，第一个数字赋值给```bdc_num ```，第二个数字赋值给```bdc_time ```
 
-![markdown17569167-d438e0480396088e.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-d438e0480396088e.webp.jpg){:width="100%" align=center}
+![markdown17569167-d438e0480396088e.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-d438e0480396088e.webp.jpg)
 
 操作到这一步，所有的信息相当于都提取好了
 
@@ -287,14 +247,7 @@ bdc_time = re.findall(r"\d+\.?\d*",str(bdc))[1]
 
 我想要统计最近一周的打卡情况
 
-------------
-
-
 ### 设置时间
-
-------------
-
-
 
 ```Python
 import datetime  # 先把datetime这个模块导入进来
@@ -354,11 +307,11 @@ b.find(a)     返回字符串 a 在字符串 b中第一次出现所在的索引�
 
 我们先来看，用```find_all```把打卡时间这部分的数据提取出来，同样是20条数据，包含了打卡的具体时间
 
-![markdown17569167-2cb3e184bed6a84d.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-2cb3e184bed6a84d.webp.jpg){:width="100%" align=center}
+![markdown17569167-2cb3e184bed6a84d.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-2cb3e184bed6a84d.webp.jpg)
 
 打开其中一条数据，发现我们要的时间```2019-05-22```和打卡天数```538```在不同的位置
 
-![markdown17569167-d3c62e79859d71a7.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-d3c62e79859d71a7.webp.jpg){:width="100%" align=center}
+![markdown17569167-d3c62e79859d71a7.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-d3c62e79859d71a7.webp.jpg)
 
 这里我们用```.split()```，先根据逗号，把这个字符串分开
 
@@ -367,7 +320,7 @@ shanbey_time = checkin.split(",")[0]
 shanbey_days = checkin.split(",")[3]
 ```
 
-![markdown17569167-fc1a62d91a81e3ae.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-fc1a62d91a81e3ae.webp.jpg){:width="100%" align=center}
+![markdown17569167-fc1a62d91a81e3ae.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-fc1a62d91a81e3ae.webp.jpg)
 
 然后截取字符串，用```len()```统计前面那些字符的个数，这些字符就不要了
 
@@ -379,9 +332,9 @@ num_checkin_days.append(str(shanbey_days)[len("\"num_checkin_days\": "):])
 ```
 
 
-![markdown17569167-87eb564f758fa069.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-87eb564f758fa069.webp.jpg){:width="100%" align=center}
+![markdown17569167-87eb564f758fa069.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-87eb564f758fa069.webp.jpg)
 
-![markdown17569167-55e1b8bfac6165ba.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-55e1b8bfac6165ba.webp.jpg){:width="100%" align=center}
+![markdown17569167-55e1b8bfac6165ba.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-55e1b8bfac6165ba.webp.jpg)
 
 这时候，我们只要再上一个```if``` 判断一下，统计从昨天开始的打卡记录
 
@@ -419,16 +372,12 @@ print("听力:{}分钟，总计{}句".format(time_listen,count_listen))
 print('\n') 
 print("打卡时长:{}分钟".format(time_read+time_sentence+time_bdc+time_listen))
 ```
- <br />
-![markdown17569167-598df90ac445bec3.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-598df90ac445bec3.webp.jpg){:width="100%" align=center}
 
-------------
+![markdown17569167-598df90ac445bec3.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-598df90ac445bec3.webp.jpg)
+
 
 
 ###  保存数据
-
-------------
-
 
 在获取自己的打卡情况之后，我觉得这种都输在屏幕上的内容，很难整理，不适合小组打卡。我需要它能自动保存到Excel
 这里要注意，用到Excel相关功能的时候，要导入相关库`pip install xlwt`
@@ -460,13 +409,11 @@ print("C:/Users/Administrator/Desktop/扇贝打卡.xls")
 
 此时程序运行效果如下：
 
-![markdown17569167-223a054d5353b977.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-223a054d5353b977.jpg){:width="100%" align=center}
+![markdown17569167-223a054d5353b977.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-223a054d5353b977.jpg)
 
 接着，小组有这么多ID，每次改一改，我都要手动输，那太麻烦了。
 
 我需要一个代码，把ID自动导入程序
-
-
 
 
 ```python
@@ -478,38 +425,15 @@ ID_total = ID_total.split("\n")  # 如果输入多个ID，用“\n”分开
 
 自动读取ID、查卡、保存到EXCEL
 
-![markdown17569167-6f794b6790ed1e44.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-6f794b6790ed1e44.jpg){:width="100%" align=center}
+![markdown17569167-6f794b6790ed1e44.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-6f794b6790ed1e44.jpg)
 
 最后，思考一下，需要导出小组打卡的哪些数据内容，调整代码
 
 小组打卡输出EXCEL情况如下：(昵称和ID做了打码处理)
 
-![markdown17569167-84e9b840e28e1d8b.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-84e9b840e28e1d8b.jpg){:width="100%" align=center}
-
-------------
-
-
-### 完整代码
-
-------------
-
-
-Python爬虫：[获取扇贝打卡信息](http://www.zhaojingyi0126.com/post/7/)
-
-Python爬虫：[将爬虫结果保存到Excel](http://www.zhaojingyi0126.com/post/16/)
-
-Python爬虫：[从TXT导入数据](http://www.zhaojingyi0126.com/post/17/)
-
-
-
-------------
-
+![markdown17569167-84e9b840e28e1d8b.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-84e9b840e28e1d8b.jpg)
 
 ### Python远不止爬虫
-
-------------
-
-
 
 坦白说，在学习编程40天的时候，我能写出小组查卡代码，我是非常欣喜和嘚瑟的。我还去小组技术群和扇贝编程群，要求大家表扬我，哈哈。
 
@@ -559,7 +483,7 @@ input('PDF取读完毕，按任意键退出')
 ```
  另外，做PPT图表总是很丑？
 
-![markdown17569167-b0dcf9d3d4f58786.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-b0dcf9d3d4f58786.webp.jpg){:width="100%" align=center}
+![markdown17569167-b0dcf9d3d4f58786.webp.jpg](http://pxpfco2u1.bkt.clouddn.com/markdown17569167-b0dcf9d3d4f58786.webp.jpg)
 
 Python这么多好看的图表，只要改改参数，你就能拥有。不考虑一下？
 
