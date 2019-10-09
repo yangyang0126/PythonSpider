@@ -1,5 +1,0 @@
-account = "13609290600"
-password = "123456"  
-
-account = "wubalu"
-password = "420321wbl" 
