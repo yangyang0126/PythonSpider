@@ -22,7 +22,7 @@ day_end = str(day_end).split(" ")[0]
 
 ID_total = input("请输入你的扇贝ID：")
 print('\n')
-#ID_total = "16888030"
+
 ID_total = ID_total.split(",")   # 如果输入多个ID，用“，”分开
 for ID in ID_total:
     web = "https://www.shanbay.com/api/v1/checkin/user/"+str(ID)+"/"
