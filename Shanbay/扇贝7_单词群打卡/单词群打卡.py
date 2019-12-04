@@ -20,7 +20,7 @@ for h in range(len(head)):
 
 #计算打卡的统计时间
 now = datetime.datetime.now()        #从今天开始查卡
-#now = datetime.date(2019,9,9)      #输入查卡日期，自定义查卡日期
+# now = datetime.date(2019,9,9)      #输入查卡日期，自定义查卡日期
 print("查卡日期：",now)
 print('\n')
 time2 = datetime.timedelta(days=8)   #统计一个星期的数据
@@ -114,7 +114,7 @@ for ID in ID_total:
 
    # print(ID,username,bdc_total,average,time_bdc)
 
-workbook.save('C:/Users/Administrator/Desktop/单词群打卡.xls')
+workbook.save('C:/xUsers/admin/Desktop/单词群打卡.xls')
 print('\n') 
 print('写入excel成功')
 print("文件位置：")

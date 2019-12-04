@@ -19,7 +19,7 @@ for h in range(len(head)):
 
 #计算打卡的统计时间
 #now = datetime.datetime.now()        #从今天开始查卡
-now = datetime.date(2019,10,7)      #输入查卡日期，自定义查卡日期
+now = datetime.date(2019,11,18)      #输入查卡日期，自定义查卡日期
 print("查卡日期：",now)
 print('\n')
 #time2 = datetime.timedelta(days=8)   #统计一个星期的数据
@@ -39,9 +39,9 @@ ID_total = ID_total.split("\n")  # 如果输入多个ID，用“\n”分开
 
 i = 1  #定义Excel表格的行数，从第二行开始写入，第一行已经写了表头
 
-Pages = 5
+Pages = 6
 
-count_num = datetime.date(2019,10,6)-datetime.date(2019,8,1)
+count_num = now-datetime.date(2019,8,1)
 
 def WebRead(web):
     WebResponse = urlopen(web)
@@ -121,7 +121,7 @@ for ID in ID_total:
 
    # print(ID,username,bdc_total,average,time_bdc)
 
-workbook.save('单词打卡统计.xls')
+workbook.save('单词打卡统计1118-0801.xls')
 print('\n') 
 print('写入excel成功')
 print("文件位置：和代码在同一个文件夹")

@@ -61,8 +61,8 @@ j = 1
 k = 1
 
 # 默认爬取5页
-for page in range(1,5):    
-    print("正在取读第{}数据".format(page))
+for page in range(1,320):    
+    print("正在取读第{}页数据".format(page))
     web = 'https://www.shanbay.com/api/v1/team/44584/thread/?page='+str(page)
     Text_article = GetTextWeb(web,s)
     
