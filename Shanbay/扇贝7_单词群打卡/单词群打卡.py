@@ -114,7 +114,7 @@ for ID in ID_total:
 
    # print(ID,username,bdc_total,average,time_bdc)
 
-workbook.save('C:/xUsers/admin/Desktop/单词群打卡.xls')
+workbook.save('C:/Users/admin/Desktop/单词群打卡.xls')
 print('\n') 
 print('写入excel成功')
 print("文件位置：")
