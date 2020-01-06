@@ -13,7 +13,10 @@ import xlwt
 
 # 获取豆瓣网址并解析数据
 def get_douban_books(url,num):
-    res = requests.get(url)  # requests发起请求，静态网页用get
+    headers = {
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'
+                } 
+    res = requests.get(url,headers=headers)  # requests发起请求，静态网页用get    
     soup = BeautifulSoup(res.text, 'html.parser')
     
     m = n = j = num
