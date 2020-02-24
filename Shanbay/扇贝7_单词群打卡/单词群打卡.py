@@ -2,117 +2,140 @@
 """
 Created on Mon May 20 11:50:05 2019
 
-@author: YangYang
+@author: Yenny
 """
 
-from urllib.request import urlopen
-import datetime
-import re
-import xlwt
+
+import datetime # 计算时间
+import xlwt # 保存Excel
+import os # 获取文件路劲
+import requests  # 获取网页数据
+
+#计算打卡的统计时间
+DayToday = str(datetime.datetime.now()).split(" ")[0]
+# now = datetime.date(2019,9,9)      # 输入查卡日期，自定义查卡日期
+print("查卡日期：",DayToday)
+print('\n')
+DayMon = str(datetime.datetime.now() - datetime.timedelta(days=7)).split(" ")[0]  
+DayTue = str(datetime.datetime.now() - datetime.timedelta(days=6)).split(" ")[0]  
+DayWed = str(datetime.datetime.now() - datetime.timedelta(days=5)).split(" ")[0]  
+DayThur = str(datetime.datetime.now() - datetime.timedelta(days=4)).split(" ")[0]  
+DayFri = str(datetime.datetime.now() - datetime.timedelta(days=3)).split(" ")[0]  
+DaySat = str(datetime.datetime.now() - datetime.timedelta(days=2)).split(" ")[0] 
+DaySun = str(datetime.datetime.now() - datetime.timedelta(days=1)).split(" ")[0]  
+DayEnd = str(datetime.datetime.now() - datetime.timedelta(days=8)).split(" ")[0]  
 
 # 定义保存Excel的位置
 workbook = xlwt.Workbook()  #定义workbook
-sheet = workbook.add_sheet('单词群打卡')  #添加sheet
-head = ['扇贝ID', '扇贝用户名', '单词总计', '平均', '学习时间']    #表头
-# head = ['昵称', '扇贝ID', '背单词天数', '平均单词数',]
+sheet = workbook.add_sheet(DayToday)  #添加sheet
+
+# 设置居中
+al = xlwt.Alignment()
+al.horz = 0x02      # 设置水平居中
+al.vert = 0x01      # 设置垂直居中
+
+# 设置边框
+borders = xlwt.Borders() # Create Borders
+borders.left = xlwt.Borders.THIN 
+borders.right = xlwt.Borders.THIN
+borders.top = xlwt.Borders.THIN
+borders.bottom = xlwt.Borders.THIN
+borders.left_colour = 0x40
+borders.right_colour = 0x40
+borders.top_colour = 0x40
+borders.bottom_colour = 0x40
+
+# 设置单元格背景颜色
+pattern = xlwt.Pattern() 
+pattern.pattern = xlwt.Pattern.SOLID_PATTERN 
+pattern.pattern_fore_colour = 47
+
+
+# 创建样式
+style1 = xlwt.XFStyle()  # 创建一个样式对象，初始化样式 style1
+style2 = xlwt.XFStyle()  # 创建一个样式对象，初始化样式 style2
+
+style1.borders = borders # Add Borders to Style
+style2.borders = borders # Add Borders to Style
+style1.alignment = al
+style2.alignment = al
+style1.pattern = pattern # Add Pattern to Style
+
+# 写入数据
+head = ['ID', 'NickName', DayMon, DayTue, DayWed, DayThur, DayFri, DaySat, DaySun,'打卡天数','单词总计', '时间总计']    #表头
 for h in range(len(head)):
-    sheet.write(0, h, head[h])    #把表头写到Excel里面去
+    sheet.write(0, h, head[h],style2)    #把表头写到Excel里面去
 
-#计算打卡的统计时间
-now = datetime.datetime.now()        #从今天开始查卡
-# now = datetime.date(2019,9,9)      #输入查卡日期，自定义查卡日期
-print("查卡日期：",now)
-print('\n')
-time2 = datetime.timedelta(days=8)   #统计一个星期的数据
-day_now = str(now).split(" ")[0]
-day_end = now - time2
-day_end = str(day_end).split(" ")[0]
-
+    
+path = os.getcwd() # 获取当前代码文件路径
 print("开始读取ID数据")
-print("数据位置：")
-print("扇贝单词群ID.txt")
+print("数据位置："+ path+"ID.txt")
 print('\n')
 
 #从txt导入数据
-ID_total_input = open('扇贝单词群ID.txt')
+ID_total_input = open('ID.txt')
 ID_total = ID_total_input.read()
 ID_total = ID_total.split("\n")  # 如果输入多个ID，用“\n”分开
 
 i = 1  #定义Excel表格的行数，从第二行开始写入，第一行已经写了表头
 
-for ID in ID_total:
-
-    web = "https://www.shanbay.com/api/v1/checkin/user/"+str(ID)+"/"
-    shanbay = urlopen(web)
-    #shanbay = urlopen("https://www.shanbay.com/api/v1/checkin/user/16888030/")
-    shanbay_data = shanbay.read().decode()
-    
-    #获取昵称
-    find_username = re.findall("username\".*?,",shanbay_data)[0]
-    username = str(find_username)[len("username\": \""):-2]
-    
-    # 获取打卡数据
-    find_data = re.findall("\"stats\".*?track_object_img" ,shanbay_data)
-    find_start = "\"stats\": "
-    find_end = "\"track_object_img\""
-
-    num_today = "\"num_today\": "
-    used_time = "\"used_time\": "
-
-    count = 0
-    count_num = 0
-    time_bdc = 0
-    bdc_total = 0    
-    
-    #获取打卡天数
-    num_checkin_days = re.findall("num_checkin_days\": (.*?),",shanbay_data) 
-    checkin_date = re.findall("\"checkin_date\": \"(.*?)\"",shanbay_data)
-
-    # 开始统计数据
-    for data in find_data:       
-    
-        bdc = re.findall("\"bdc\":.*?}",data)
-        if bdc == []:
-            bdc = "{num_today\": 0, \"used_time\": 0.0}"    
-    
-        bdc_num = re.findall(r"\d+\.?\d*",str(bdc))[0]
-        bdc_time = re.findall(r"\d+\.?\d*",str(bdc))[1]        
-        
-        if checkin_date[count] >= day_now:
-            count += 1
-        elif checkin_date[count] > day_end:            
-            time_bdc = time_bdc+float(bdc_time)
-            bdc_total = bdc_total+float(bdc_num)           
-            print("{}:打卡{}天,单词{}个,学习时间{}分钟".format(checkin_date[count],num_checkin_days[count],bdc_num,bdc_time))
-            count += 1
-            if float(bdc_time) > 0:
-                count_num += 1                              
+def CollectCheakinBDC(i,day,LearningDataDaily,style1,style2):
+    global bdc_used_time_total,bdc_num_today_total,checkin_date_total
+    try:
+        bdc_num_today = LearningDataDaily['stats']['bdc']['num_today']
+        bdc_used_time = LearningDataDaily['stats']['bdc']['used_time']
+        if bdc_num_today<20 or bdc_used_time<6:
+            sheet.write(i, day, str(bdc_num_today)+"/"+str(bdc_used_time),style1)
         else:
-            count += 1
-    
-    if  count_num == 0:
-        average = 0
-    else:
-        average = bdc_total/count_num
-        average = round(average,2)
-    print("ID:{},昵称:{},背单词总计：{}，平均：{}，时长：{}分钟".format(ID,username,bdc_total,average,time_bdc))
-    
-    # 把内容保存到Excel
-    '''
-    sheet.write(i, 0, ID)  # 第i行，第1列
-    sheet.write(i, 1, username)  # 第i行，第2列
-    sheet.write(i, 2, bdc_total)  # 第i行，第3列
-    sheet.write(i, 3, average)  # 第i行，第4列
-    sheet.write(i, 4, time_bdc)  # 第i行，第5列
-    '''
-    sheet.write(i, 1, ID)
-    sheet.write(i, 2, count_num)
-    sheet.write(i, 3, average)
-    sheet.write(i, 4, time_bdc)
-    
-    i += 1
+            sheet.write(i, day, str(bdc_num_today)+"/"+str(bdc_used_time),style2)
+        bdc_used_time_total += bdc_used_time
+        bdc_num_today_total += bdc_num_today
+        checkin_date_total += 1
+    except:  
+        bdc_num_today = 0
+        bdc_used_time = 0.0
+        bdc_used_time_total = bdc_used_time_total
+        bdc_num_today_total = bdc_num_today_total
+        checkin_date_total = checkin_date_total
+    return bdc_used_time_total,bdc_num_today_total,checkin_date_total
 
-   # print(ID,username,bdc_total,average,time_bdc)
+for ID in ID_total:
+    
+    web = "https://www.shanbay.com/api/v1/checkin/user/"+str(ID)+"/"
+    res = requests.get(web)  # requests发起请求，静态网页用get
+    LearningData = res.json()
+    sheet.write(i, 0, ID,style2) # 保存ID
+    NickName = LearningData['data'][0]['user']['nickname']
+    sheet.write(i, 1, NickName, style2) # 保存昵称
+
+    bdc_used_time_total = 0
+    checkin_date_total = 0
+    bdc_num_today_total = 0
+    # 获取单词打卡记录
+    for LearningDataDaily in LearningData['data']:
+        checkin_date =  LearningDataDaily['checkin_date']
+        if checkin_date == DayMon:
+            CollectCheakinBDC(i,2,LearningDataDaily,style1,style2)
+        if checkin_date == DayTue:
+            CollectCheakinBDC(i,3,LearningDataDaily,style1,style2)
+        if checkin_date == DayWed:
+            CollectCheakinBDC(i,4,LearningDataDaily,style1,style2)
+        if checkin_date == DayThur:
+            CollectCheakinBDC(i,5,LearningDataDaily,style1,style2)         
+        if checkin_date == DayFri:
+            CollectCheakinBDC(i,6,LearningDataDaily,style1,style2)
+        if checkin_date == DaySat:
+            CollectCheakinBDC(i,7,LearningDataDaily,style1,style2)
+        if checkin_date == DaySun:
+            CollectCheakinBDC(i,8,LearningDataDaily,style1,style2)
+    if checkin_date_total<5:
+        sheet.write(i, 9, checkin_date_total,style1)
+    else:
+        sheet.write(i, 9, checkin_date_total,style2)
+    sheet.write(i, 10, bdc_num_today_total,style2)
+    sheet.write(i, 11, bdc_used_time_total,style2)
+    print(ID+","+NickName+"打卡"+str(checkin_date_total)+"天，单词总计"+str(bdc_num_today_total)+"个")
+    i += 1 
 
 workbook.save('C:/Users/admin/Desktop/单词群打卡.xls')
 print('\n') 
