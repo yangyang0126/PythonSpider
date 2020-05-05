@@ -62,4 +62,12 @@ df = df.set_index('date') # 将date设置为index
 MonthDf = df.resample('M').sum().head()
 
 # 绘图
-MonthDf['bdc'][1]
+
+line_chart = pygal.StackedBar()
+line_chart.title = ''
+line_chart.x_labels = map(str, range(1, 13))
+line_chart.add('bdc', MonthDf['time_bdc'])
+line_chart.add('listen', MonthDf['time_listen'])
+line_chart.add('read', MonthDf['time_read'])
+line_chart.add('speak', [450,450,450])
+line_chart.render_to_file('summary.svg')         
