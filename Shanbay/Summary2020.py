@@ -63,6 +63,7 @@ df = df.set_index('date') # 将date设置为index
 MonthDf = df.resample('M').sum().head()
 
 # 绘图
+<<<<<<< HEAD
 MonthDf['bdc'][1]
 line_chart = pygal.StackedBar()
 line_chart.title = 'Browser usage evolution (in %)'
@@ -72,3 +73,14 @@ line_chart.add('Chrome',  [None, None, None, None, None, None,    0,  3.9, 10.8,
 line_chart.add('IE',      [85.8, 84.6, 84.7, 74.5,   66, 58.6, 54.7, 44.8, 36.2, 26.6, 20.1])
 line_chart.add('Others',  [14.2, 15.4, 15.3,  8.9,    9, 10.4,  8.9,  5.8,  6.7,  6.8,  7.5])
 line_chart.render_to_file('bar_chart.svg')         
+=======
+
+line_chart = pygal.StackedBar()
+line_chart.title = ''
+line_chart.x_labels = map(str, range(1, 13))
+line_chart.add('bdc', MonthDf['time_bdc'])
+line_chart.add('listen', MonthDf['time_listen'])
+line_chart.add('read', MonthDf['time_read'])
+line_chart.add('speak', [450,450,450])
+line_chart.render_to_file('summary.svg')         
+>>>>>>> b8ecd6bbd21d041340c65efb72ce7f0e035d730f
