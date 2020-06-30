@@ -22,8 +22,8 @@ now = datetime.datetime.now()        #从今天开始查卡
 #now = datetime.date(2019,5,13)      #输入查卡日期，自定义查卡日期
 print("查卡日期：",now)
 print('\n')
-ID = 71256646
-Pages = 15
+ID = 16888030
+Pages = 20
 
 
 i = 1  #定义Excel表格的行数，从第二行开始写入，第一行已经写了表头

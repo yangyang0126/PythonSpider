@@ -137,11 +137,7 @@ for ID in ID_total:
     print(ID+","+NickName+"打卡"+str(checkin_date_total)+"天，单词总计"+str(bdc_num_today_total)+"个")
     i += 1 
 
-<<<<<<< HEAD
-workbook.save('C:/Users/zhaoy/单词群打卡.xls')
-=======
 workbook.save('C:/Users/admin/Desktop/单词群打卡.xls')
->>>>>>> 1b6f24b6675f8f26766c8851f3297753ca6cb7ed
 print('\n') 
 print('写入excel成功')
 print("文件位置：")
