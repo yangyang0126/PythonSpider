@@ -20,7 +20,7 @@ ExcelRow = 1; #定义Excel表格的行数，从第二行开始写入，第一行
 
 # 读取数据
 ID = 16888030
-for Page in range(1,10):
+for Page in range(1,2):
     Web = "https://www.shanbay.com/api/v1/checkin/user/"+str(ID)+"/"+"?page="+str(Page)
     Res = requests.get(Web)
     DataEveryPage = Res.json()
@@ -63,18 +63,6 @@ df = df.set_index('date') # 将date设置为index
 MonthDf = df.resample('M').sum().head()
 
 # 绘图
-<<<<<<< HEAD
-MonthDf['bdc'][1]
-line_chart = pygal.StackedBar()
-line_chart.title = 'Browser usage evolution (in %)'
-line_chart.x_labels = map(str, range(2002, 2013))
-line_chart.add('Firefox', [None, None, 0, 16.6,   25,   31, 36.4, 45.5, 46.3, 42.8, 37.1])
-line_chart.add('Chrome',  [None, None, None, None, None, None,    0,  3.9, 10.8, 23.8, 35.3])
-line_chart.add('IE',      [85.8, 84.6, 84.7, 74.5,   66, 58.6, 54.7, 44.8, 36.2, 26.6, 20.1])
-line_chart.add('Others',  [14.2, 15.4, 15.3,  8.9,    9, 10.4,  8.9,  5.8,  6.7,  6.8,  7.5])
-line_chart.render_to_file('bar_chart.svg')         
-=======
-
 line_chart = pygal.StackedBar()
 line_chart.title = ''
 line_chart.x_labels = map(str, range(1, 13))
@@ -83,4 +71,4 @@ line_chart.add('listen', MonthDf['time_listen'])
 line_chart.add('read', MonthDf['time_read'])
 line_chart.add('speak', [450,450,450])
 line_chart.render_to_file('summary.svg')         
->>>>>>> b8ecd6bbd21d041340c65efb72ce7f0e035d730f
+

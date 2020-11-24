@@ -12,36 +12,36 @@ import xlwt
 # 定义保存Excel的位置
 workbook = xlwt.Workbook()  #定义workbook
 sheet = workbook.add_sheet('单词群打卡')  #添加sheet
-head = ['扇贝ID', '扇贝用户名', '单词总计', '平均', '学习时间']    #表头
+head = ['扇贝ID', '天数', '单词总计', '学习时间']    #表头
 # head = ['昵称', '扇贝ID', '背单词天数', '平均单词数',]
 for h in range(len(head)):
     sheet.write(0, h, head[h])    #把表头写到Excel里面去
 
 #计算打卡的统计时间
 #now = datetime.datetime.now()        #从今天开始查卡
-now = datetime.date(2019,11,18)      #输入查卡日期，自定义查卡日期
+now = datetime.date(2020,10,29)      #输入查卡日期，自定义查卡日期
 print("查卡日期：",now)
 print('\n')
 #time2 = datetime.timedelta(days=8)   #统计一个星期的数据
 day_now = str(now).split(" ")[0]
-day_end = datetime.date(2019,7,31)
+day_end = datetime.date(2019,12,31)
 day_end = str(day_end).split(" ")[0]
 
 print("开始读取ID数据")
 print("数据位置：")
-print("扇贝单词群ID.txt")
+print("ID.txt")
 print('\n')
 
 #从txt导入数据
-ID_total_input = open('扇贝单词群ID.txt')
+ID_total_input = open('ID.txt')
 ID_total = ID_total_input.read()
 ID_total = ID_total.split("\n")  # 如果输入多个ID，用“\n”分开
 
 i = 1  #定义Excel表格的行数，从第二行开始写入，第一行已经写了表头
 
-Pages = 6
+Pages = 31
 
-count_num = now-datetime.date(2019,8,1)
+count_num = now-datetime.date(2019,12,31)
 
 def WebRead(web):
     WebResponse = urlopen(web)
@@ -59,7 +59,8 @@ for ID in ID_total:
     
     time_bdc = 0
     bdc_total = 0 
-        
+    count_day = 0    
+    
     for Page in range(1,Pages):
 
         web = "https://www.shanbay.com/api/v1/checkin/user/"+str(ID)+"/"+"?page="+str(Page)
@@ -95,6 +96,8 @@ for ID in ID_total:
                 bdc_total = bdc_total+float(bdc_num)           
                 print("{}:打卡{}天,单词{}个,学习时间{}分钟".format(checkin_date[count],num_checkin_days[count],bdc_num,bdc_time))
                 count += 1
+                if float(bdc_time) > 0:
+                    count_day += 1
             else:
                 count += 1
         
@@ -111,17 +114,16 @@ for ID in ID_total:
     sheet.write(i, 3, average)  # 第i行，第4列
     sheet.write(i, 4, time_bdc)  # 第i行，第5列
     '''
-    sheet.write(i, 1, ID)
+    sheet.write(i, 0, ID)
+    sheet.write(i, 1, count_day)
     sheet.write(i, 2, bdc_total)
-    sheet.write(i, 3, average)
-    sheet.write(i, 4, time_bdc)
+    sheet.write(i, 3, time_bdc)
     
     i += 1
 
-
    # print(ID,username,bdc_total,average,time_bdc)
 
-workbook.save('单词打卡统计1118-0801.xls')
+workbook.save('单词打卡统计2020.xls')
 print('\n') 
 print('写入excel成功')
 print("文件位置：和代码在同一个文件夹")
