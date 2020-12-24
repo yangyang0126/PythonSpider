@@ -19,7 +19,7 @@ for h in range(len(head)):
 
 #计算打卡的统计时间
 #now = datetime.datetime.now()        #从今天开始查卡
-now = datetime.date(2020,10,29)      #输入查卡日期，自定义查卡日期
+now = datetime.date(2020,11,30)      #输入查卡日期，自定义查卡日期
 print("查卡日期：",now)
 print('\n')
 #time2 = datetime.timedelta(days=8)   #统计一个星期的数据
@@ -85,6 +85,7 @@ for ID in ID_total:
             bdc = re.findall("\"bdc\":.*?}",data)
             if bdc == []:
                 bdc = "{num_today\": 0, \"used_time\": 0.0}"    
+                print(checkin_date[count])
         
             bdc_num = re.findall(r"\d+\.?\d*",str(bdc))[0]
             bdc_time = re.findall(r"\d+\.?\d*",str(bdc))[1]        

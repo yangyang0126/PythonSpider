@@ -7,8 +7,6 @@ Created on Thu Mar  5 14:46:04 2020
 import requests  # 获取网页数据
 import datetime
 import xlwt
-import pandas as pd
-import pygal
   
 # 准备表格
 workbook = xlwt.Workbook()  #定义workbook
@@ -19,18 +17,19 @@ for h in range(len(head)):
 ExcelRow = 1; #定义Excel表格的行数，从第二行开始写入，第一行已经写了表头
 
 # 读取数据
-ID = 16888030
-for Page in range(1,2):
+ID = 45286294#16888030
+for Page in range(1,100):
     Web = "https://www.shanbay.com/api/v1/checkin/user/"+str(ID)+"/"+"?page="+str(Page)
     Res = requests.get(Web)
     DataEveryPage = Res.json()
     
-    End = str(datetime.date(2020,1,1)).split(" ")[0]   
+    End = str(datetime.date(2018,1,1)).split(" ")[0]   
     
     for data in DataEveryPage['data']:
         if data['info']!='':
             if data['checkin_date'] >= End:
                 sheet.write(ExcelRow, 0, data['checkin_date'])  
+                print(data['checkin_date'])
                 try:
                     sheet.write(ExcelRow, 1, data['stats']['bdc']['num_today'])
                     sheet.write(ExcelRow, 4, data['stats']['bdc']['used_time'])                   
@@ -53,22 +52,5 @@ for Page in range(1,2):
                 ExcelRow += 1
             else:
                 break
-workbook.save('Summary2020.xls')
+workbook.save('Summary2020-York.xls')
 input("查卡完毕，点击回车退出")
-
-# 汇总数据，pandas
-df = pd.read_excel('Summary2020.xls')
-df['date'] = pd.to_datetime(df['date']) 
-df = df.set_index('date') # 将date设置为index
-MonthDf = df.resample('M').sum().head()
-
-# 绘图
-line_chart = pygal.StackedBar()
-line_chart.title = ''
-line_chart.x_labels = map(str, range(1, 13))
-line_chart.add('bdc', MonthDf['time_bdc'])
-line_chart.add('listen', MonthDf['time_listen'])
-line_chart.add('read', MonthDf['time_read'])
-line_chart.add('speak', [450,450,450])
-line_chart.render_to_file('summary.svg')         
-
