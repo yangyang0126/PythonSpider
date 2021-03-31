@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Mar  5 14:46:04 2020
+Created on Thu Jan 28 14:08:18 2021
 
-@author: admin
+@author: zhaoy
 """
+
 import requests  # 获取网页数据
 import datetime
 import xlwt
@@ -18,9 +19,10 @@ ExcelRow = 1; #定义Excel表格的行数，从第二行开始写入，第一行
 
 # 读取数据
 ID = 16888030
-for Page in range(1,150):
-    Web = "https://www.shanbay.com/api/v1/checkin/user/"+str(ID)+"/"+"?page="+str(Page)
+for Page in range(1,2):
+    Web = "https://www.shanbay.com/api/v1/checkin/user/"+str(ID)+"/"+"?page="+str(Page)   
     Res = requests.get(Web)
+    print(Res)
     DataEveryPage = Res.json()
     
     End = str(datetime.date(2021,1,1)).split(" ")[0]   
@@ -52,5 +54,5 @@ for Page in range(1,150):
                 ExcelRow += 1
             else:
                 break
-workbook.save('Summary20210111.xls')
+workbook.save('Summary20210128.xls')
 input("查卡完毕，点击回车退出")
